@@ -1,325 +1,232 @@
-const addressBar = document.getElementById("addressBar");
-const homeSearch = document.getElementById("homeSearch");
-const viewer = document.getElementById("viewer");
-const home = document.getElementById("home");
-const blocked = document.getElementById("blocked");
-const loadingBar = document.getElementById("loadingBar");
+/* =========================================================
+   LINUX UNBLOCKED
+   Main application logic - Standard YouTube Embed & Proxy Fallback
+========================================================= */
 
-const homeButton = document.getElementById("homeButton");
-const backButton = document.getElementById("backButton");
-const forwardButton = document.getElementById("forwardButton");
-const reloadButton = document.getElementById("reloadButton");
+document.addEventListener("DOMContentLoaded", () => {
+    // ---------------------------------------------------------
+    // 1. DOM ELEMENTS
+    // ---------------------------------------------------------
+    const homeSection = document.getElementById("home");
+    const viewerIframe = document.getElementById("viewer");
+    const blockedSection = document.getElementById("blocked");
+    const loadingBar = document.getElementById("loadingBar");
+    const statusText = document.getElementById("statusText");
 
-const goButton = document.getElementById("goButton");
-const homeGo = document.getElementById("homeGo");
-const openDirect = document.getElementById("openDirect");
+    const addressBar = document.getElementById("addressBar");
+    const goButton = document.getElementById("goButton");
 
-const statusText = document.getElementById("statusText");
+    const homeSearch = document.getElementById("homeSearch");
+    const homeGo = document.getElementById("homeGo");
 
-let historyList = [];
-let historyPosition = -1;
-let currentURL = "";
+    const homeButton = document.getElementById("homeButton");
+    const backButton = document.getElementById("backButton");
+    const forwardButton = document.getElementById("forwardButton");
+    const reloadButton = document.getElementById("reloadButton");
+    const openDirectButton = document.getElementById("openDirect");
 
+    const shortcuts = document.querySelectorAll(".shortcut");
 
-/* =========================
-   URL HANDLING
-========================= */
-
-function normalizeURL(input) {
-    const value = input.trim();
-
-    if (!value) return "";
-
-    if (/^https?:\/\//i.test(value)) {
-        return value;
-    }
-
-    /*
-     * Treat something that looks like a domain
-     * as a website.
-     */
-    if (
-        /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(value)
-    ) {
-        return `https://${value}`;
-    }
-
-    /*
-     * Otherwise use a search engine.
-     */
-    return `https://www.google.com/search?q=${encodeURIComponent(value)}`;
-}
-
-
-/* =========================
-   UI
-========================= */
-
-function setStatus(text) {
-    statusText.textContent = text;
-}
-
-function startLoading() {
-    loadingBar.classList.remove("complete");
-    loadingBar.classList.add("active");
-}
-
-function stopLoading() {
-    loadingBar.classList.remove("active");
-    loadingBar.classList.add("complete");
-
-    setTimeout(() => {
-        loadingBar.classList.remove("complete");
-    }, 250);
-}
-
-function updateNavigation() {
-    backButton.disabled = historyPosition <= 0;
-
-    forwardButton.disabled =
-        historyPosition >= historyList.length - 1;
-}
-
-
-/* =========================
-   HISTORY
-========================= */
-
-function addToHistory(url) {
-    historyList = historyList.slice(
-        0,
-        historyPosition + 1
-    );
-
-    historyList.push(url);
-    historyPosition = historyList.length - 1;
-
-    updateNavigation();
-}
-
-
-/* =========================
-   LOAD WEBSITE
-========================= */
-
-function loadWebsite(input, addHistory = true) {
-    const url = normalizeURL(input);
-
-    if (!url) return;
-
-    currentURL = url;
-    addressBar.value = url;
-
-    if (addHistory) {
-        addToHistory(url);
-    }
-
-    home.style.display = "none";
-    blocked.style.display = "none";
-    viewer.hidden = false;
-
-    setStatus("Loading…");
-    startLoading();
-
-    viewer.src = url;
-}
-
-
-/* =========================
-   SUBMIT
-========================= */
-
-function submit(input) {
-    const value = input.value.trim();
-
-    if (!value) return;
-
-    loadWebsite(value);
-
-    input.blur();
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-goButton.addEventListener("click", () => {
-    submit(addressBar);
-});
-
-homeGo.addEventListener("click", () => {
-    submit(homeSearch);
-});
-
-
-[addressBar, homeSearch].forEach(input => {
-    input.addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            submit(input);
+    // Disable Grammarly interference on inputs
+    [addressBar, homeSearch].forEach(input => {
+        if (input) {
+            input.setAttribute("data-gramm", "false");
+            input.setAttribute("spellcheck", "false");
         }
     });
-});
 
+    // ---------------------------------------------------------
+    // 2. STATE MANAGEMENT & URL PARSING
+    // ---------------------------------------------------------
+    let currentRawUrl = "";
 
-/* =========================
-   SHORTCUTS
-========================= */
+    function formatUrl(input) {
+        let trimmed = input.trim();
+        if (!trimmed) return "";
 
-document
-    .querySelectorAll("[data-url]")
-    .forEach(button => {
-        button.addEventListener("click", () => {
-            loadWebsite(button.dataset.url);
+        if (/^(https?:\/\/)/i.test(trimmed)) {
+            return trimmed;
+        } else if (/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+/.test(trimmed)) {
+            return `https://${trimmed}`;
+        }
+
+        return `https://www.google.com/search?q=${encodeURIComponent(trimmed)}`;
+    }
+
+    // 🎬 FIXED YOUTUBE EMBED HANDLER
+    function getProxiedUrl(targetUrl) {
+        if (targetUrl.startsWith("/") || targetUrl.startsWith(window.location.origin)) {
+            return targetUrl;
+        }
+
+        try {
+            const urlObj = new URL(targetUrl);
+            const hostname = urlObj.hostname.toLowerCase();
+
+            // 1. Handle YouTube Watch Links -> Convert directly to Iframe Embed 🍿
+            if (hostname.includes("youtube.com")) {
+                const videoId = urlObj.searchParams.get("v");
+                if (videoId) {
+                    return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+                }
+            }
+
+            // 2. Handle Short youtu.be Links -> Convert directly to Iframe Embed 🍿
+            if (hostname.includes("youtu.be")) {
+                const videoId = urlObj.pathname.slice(1);
+                if (videoId) {
+                    return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+                }
+            }
+
+            // 3. Static thumbnail domains - load directly!
+            if (hostname.includes("ytimg.com") || hostname.includes("ggpht.com")) {
+                return targetUrl;
+            }
+
+        } catch (err) {
+            console.error("URL parsing error in getProxiedUrl:", err);
+        }
+
+        // Default fallback: Route standard websites & home feeds through your proxy!
+        return `/proxy?url=${encodeURIComponent(targetUrl)}`;
+    }
+
+    // ---------------------------------------------------------
+    // 3. SCREEN SWITCHING & NAVIGATION
+    // ---------------------------------------------------------
+    function showHome() {
+        homeSection.style.display = "flex";
+        blockedSection.style.display = "none";
+        viewerIframe.setAttribute("hidden", "");
+        viewerIframe.src = "about:blank";
+
+        addressBar.value = "";
+        statusText.textContent = "Ready";
+        currentRawUrl = "";
+        updateNavState();
+    }
+
+    function showViewer() {
+        homeSection.style.display = "none";
+        blockedSection.style.display = "none";
+        viewerIframe.removeAttribute("hidden");
+    }
+
+    function showBlocked() {
+        homeSection.style.display = "none";
+        viewerIframe.setAttribute("hidden", "");
+        blockedSection.style.display = "flex";
+        statusText.textContent = "Blocked";
+    }
+
+    function updateNavState() {
+        backButton.disabled = homeSection.style.display === "flex";
+        forwardButton.disabled = homeSection.style.display === "flex";
+    }
+
+    // ---------------------------------------------------------
+    // 4. CORE LOADING LOGIC
+    // ---------------------------------------------------------
+    function navigateTo(userInput) {
+        const targetUrl = formatUrl(userInput);
+        if (!targetUrl) return;
+
+        currentRawUrl = targetUrl;
+        addressBar.value = targetUrl;
+
+        showViewer();
+        statusText.textContent = "Loading...";
+        loadingBar.classList.remove("complete");
+        loadingBar.classList.add("active");
+
+        viewerIframe.src = getProxiedUrl(targetUrl);
+        updateNavState();
+    }
+
+    // ---------------------------------------------------------
+    // 5. IFRAME LISTENERS
+    // ---------------------------------------------------------
+    viewerIframe.addEventListener("load", () => {
+        loadingBar.classList.remove("active");
+        loadingBar.classList.add("complete");
+
+        setTimeout(() => {
+            loadingBar.classList.remove("complete");
+        }, 400);
+
+        if (viewerIframe.src === "about:blank" || !viewerIframe.src) return;
+
+        statusText.textContent = "Loaded";
+    });
+
+    viewerIframe.addEventListener("error", () => {
+        loadingBar.classList.remove("active");
+        showBlocked();
+    });
+
+    // ---------------------------------------------------------
+    // 6. EVENT HANDLERS
+    // ---------------------------------------------------------
+    goButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        navigateTo(addressBar.value);
+    });
+
+    addressBar.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            navigateTo(addressBar.value);
+        }
+    });
+
+    if (homeGo) {
+        homeGo.addEventListener("click", (e) => {
+            e.preventDefault();
+            navigateTo(homeSearch.value);
+        });
+    }
+
+    if (homeSearch) {
+        homeSearch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                navigateTo(homeSearch.value);
+            }
+        });
+    }
+
+    shortcuts.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetUrl = button.getAttribute("data-url");
+            if (targetUrl) navigateTo(targetUrl);
         });
     });
 
+    homeButton.addEventListener("click", showHome);
 
-/* =========================
-   HOME
-========================= */
+    backButton.addEventListener("click", () => {
+        try {
+            viewerIframe.contentWindow.history.back();
+        } catch (e) {
+            console.warn("Cross-origin back navigation blocked by browser.");
+        }
+    });
 
-homeButton.addEventListener("click", () => {
-    viewer.hidden = true;
-    viewer.src = "";
+    forwardButton.addEventListener("click", () => {
+        try {
+            viewerIframe.contentWindow.history.forward();
+        } catch (e) {
+            console.warn("Cross-origin forward navigation blocked by browser.");
+        }
+    });
 
-    blocked.style.display = "none";
-    home.style.display = "flex";
+    reloadButton.addEventListener("click", () => {
+        if (currentRawUrl) navigateTo(currentRawUrl);
+    });
 
-    addressBar.value = "";
-    currentURL = "";
-
-    setStatus("Ready");
+    openDirectButton.addEventListener("click", () => {
+        if (currentRawUrl) window.open(currentRawUrl, "_blank", "noopener,noreferrer");
+    });
 });
-
-
-/* =========================
-   BACK
-========================= */
-
-backButton.addEventListener("click", () => {
-    if (historyPosition <= 0) return;
-
-    historyPosition--;
-
-    loadWebsite(
-        historyList[historyPosition],
-        false
-    );
-
-    updateNavigation();
-});
-
-
-/* =========================
-   FORWARD
-========================= */
-
-forwardButton.addEventListener("click", () => {
-    if (
-        historyPosition >=
-        historyList.length - 1
-    ) {
-        return;
-    }
-
-    historyPosition++;
-
-    loadWebsite(
-        historyList[historyPosition],
-        false
-    );
-
-    updateNavigation();
-});
-
-
-/* =========================
-   RELOAD
-========================= */
-
-reloadButton.addEventListener("click", () => {
-    if (!currentURL) return;
-
-    setStatus("Reloading…");
-    startLoading();
-
-    viewer.src = currentURL;
-});
-
-
-/* =========================
-   IFRAME EVENTS
-========================= */
-
-viewer.addEventListener("load", () => {
-    stopLoading();
-
-    setStatus("Loaded");
-
-    /*
-     * We cannot inspect the iframe's actual page
-     * because of browser same-origin security.
-     *
-     * Some websites may still refuse embedding.
-     */
-});
-
-
-viewer.addEventListener("error", () => {
-    stopLoading();
-
-    setStatus("Unable to load");
-
-    blocked.style.display = "flex";
-});
-
-
-/* =========================
-   DIRECT OPEN
-========================= */
-
-openDirect.addEventListener("click", () => {
-    if (!currentURL) return;
-
-    window.open(
-        currentURL,
-        "_blank",
-        "noopener,noreferrer"
-    );
-});
-
-
-/* =========================
-   KEYBOARD SHORTCUTS
-========================= */
-
-document.addEventListener("keydown", event => {
-    if (
-        (event.ctrlKey || event.metaKey) &&
-        event.key.toLowerCase() === "l"
-    ) {
-        event.preventDefault();
-
-        addressBar.focus();
-        addressBar.select();
-    }
-
-    if (
-        (event.ctrlKey || event.metaKey) &&
-        event.key.toLowerCase() === "r"
-    ) {
-        event.preventDefault();
-
-        reloadButton.click();
-    }
-});
-
-
-/* =========================
-   INITIAL STATE
-========================= */
-
-updateNavigation();
-setStatus("Ready");

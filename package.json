@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "unblock",
   "version": "1.0.0",
   "private": true,
@@ -11,5 +11,23 @@
   },
   "devDependencies": {
     "wrangler": "^3.0.0"
-  }
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "cors": "^2.8.5",
+    "express": "^5.0.0",
+    "express-http-proxy": "^2.1.2"
+  },
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aerosecurehub-source/unblockedwebsites.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aerosecurehub-source/unblockedwebsites/issues"
+  },
+  "homepage": "https://github.com/aerosecurehub-source/unblockedwebsites#readme"
 }
