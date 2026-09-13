@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111318"
+    >
+
+    <title>Linux Unblocked</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- TOP NAVIGATION -->
+
+    <header class="topbar">
+
+        <div class="toolbar">
+
+            <button
+                id="homeButton"
+                class="nav-button"
+                title="Home"
+                aria-label="Home"
+            >
+                ⌂
+            </button>
+
+            <button
+                id="backButton"
+                class="nav-button"
+                title="Back"
+                aria-label="Back"
+                disabled
+            >
+                ‹
+            </button>
+
+            <button
+                id="forwardButton"
+                class="nav-button"
+                title="Forward"
+                aria-label="Forward"
+                disabled
+            >
+                ›
+            </button>
+
+            <button
+                id="reloadButton"
+                class="nav-button"
+                title="Reload"
+                aria-label="Reload"
+            >
+                ↻
+            </button>
+
+
+            <!-- ADDRESS BAR -->
+
+            <div class="address-wrapper">
+
+                <span
+                    class="address-icon"
+                    aria-hidden="true"
+                >
+                    🔒
+                </span>
+
+                <input
+                    id="addressBar"
+                    class="address"
+                    type="text"
+                    inputmode="url"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    placeholder="Search or enter a web address"
+                    aria-label="Address"
+                >
+
+                <button
+                    id="goButton"
+                    class="go-button"
+                    type="button"
+                >
+                    GO
+                </button>
+
+            </div>
+
+
+            <div
+                id="statusText"
+                class="status"
+                aria-live="polite"
+            >
+                Ready
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- BROWSER CONTENT -->
+
+    <main class="browser">
+
+        <div
+            id="loadingBar"
+            class="loading-bar"
+        ></div>
+
+
+        <!-- HOME PAGE -->
+
+        <section
+            id="home"
+            class="home"
+        >
+
+            <div class="home-card">
+
+                <!-- BRAND -->
+
+                <div class="brand">
+
+                    <div
+                        class="brand-icon"
+                        aria-hidden="true"
+                    >
+                        🐧
+                    </div>
+
+                    <div class="brand-text">
+
+                        <h1>
+                            Linux Unblocked
+                        </h1>
+
+                        <p>
+                            A lightweight web viewer
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="home-search-wrapper">
+
+                    <input
+                        id="homeSearch"
+                        class="home-search"
+                        type="text"
+                        inputmode="url"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        placeholder="Search or enter a web address"
+                        aria-label="Search or enter a web address"
+                    >
+
+                    <button
+                        id="homeGo"
+                        class="home-go"
+                        type="button"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+
+                <!-- SHORTCUTS -->
+
+                <div class="shortcuts">
+
+                    <button
+                        class="shortcut"
+                        type="button"
+                        data-url="https://www.google.com/"
+                    >
+                        <span>🔎</span>
+                        <span>Google</span>
+                    </button>
+
+                    <button
+                        class="shortcut"
+                        type="button"
+                        data-url="https://www.youtube.com/"
+                    >
+                        <span>▶️</span>
+                        <span>YouTube</span>
+                    </button>
+
+                    <button
+                        class="shortcut"
+                        type="button"
+                        data-url="https://www.wikipedia.org/"
+                    >
+                        <span>📚</span>
+                        <span>Wikipedia</span>
+                    </button>
+
+                    <button
+                        class="shortcut"
+                        type="button"
+                        data-url="https://github.com/"
+                    >
+                        <span>💻</span>
+                        <span>GitHub</span>
+                    </button>
+
+                </div>
+
+
+                <!-- INFO -->
+
+                <div class="info">
+
+                    <span>
+                        Linux Unblocked
+                    </span>
+
+                    <span class="separator">
+                        •
+                    </span>
+
+                    <span>
+                        Web Viewer
+                    </span>
+
+                    <span class="separator">
+                        •
+                    </span>
+
+                    <span>
+                        Search the web
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- WEBSITE VIEWER -->
+
+        <iframe
+            id="viewer"
+            class="viewer"
+            title="Linux Unblocked Web Viewer"
+            hidden
+        ></iframe>
+
+
+        <!-- EMBEDDING FALLBACK -->
+
+        <section
+            id="blocked"
+            class="blocked"
+            aria-live="polite"
+        >
+
+            <div class="blocked-card">
+
+                <div
+                    class="blocked-icon"
+                    aria-hidden="true"
+                >
+                    🛡️
+                </div>
+
+                <h2>
+                    This site cannot be embedded
+                </h2>
+
+                <p>
+                    This website has security settings
+                    that prevent it from being displayed
+                    inside Linux Unblocked.
+                </p>
+
+                <button
+                    id="openDirect"
+                    class="open-direct"
+                    type="button"
+                >
+                    Open Website Directly ↗
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<script
+    type="module"
+    src="./index.js"
+></script>
+
+</body>
+</html>

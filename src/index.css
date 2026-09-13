@@ -1,0 +1,635 @@
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+    overflow: hidden;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background: #111318;
+    color: #e8eaed;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+    background: #111318;
+
+    border-bottom:
+        1px solid #2c3038;
+
+    padding: 8px;
+}
+
+.toolbar {
+    width: 100%;
+    max-width: 1500px;
+
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.nav-button {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+    color: #e8eaed;
+
+    font-size: 24px;
+
+    transition:
+        background 0.15s,
+        opacity 0.15s;
+}
+
+.nav-button:hover {
+    background: #252931;
+}
+
+.nav-button:active {
+    background: #30343d;
+}
+
+.nav-button:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+
+/* =========================
+   ADDRESS BAR
+========================= */
+
+.address-wrapper {
+    height: 44px;
+
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 15px;
+    padding-right: 5px;
+
+    background: #1d2026;
+
+    border:
+        1px solid #3b4049;
+
+    border-radius: 24px;
+
+    transition:
+        border-color 0.15s,
+        background 0.15s;
+}
+
+.address-wrapper:focus-within {
+    border-color: #8ab4f8;
+    background: #20242b;
+}
+
+.address-icon {
+    margin-right: 8px;
+
+    color: #8b929e;
+
+    font-size: 14px;
+}
+
+.address {
+    width: 100%;
+
+    flex: 1;
+
+    min-width: 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #e8eaed;
+
+    font-size: 15px;
+}
+
+.address::placeholder {
+    color: #777e89;
+}
+
+.go-button {
+    height: 34px;
+
+    padding:
+        0 16px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: #8ab4f8;
+    color: #111318;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        transform 0.1s,
+        background 0.15s;
+}
+
+.go-button:hover {
+    background: #a8c7fa;
+}
+
+.go-button:active {
+    transform: scale(0.96);
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+    min-width: 70px;
+
+    padding: 0 8px;
+
+    color: #777e89;
+
+    font-size: 12px;
+
+    text-align: right;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   BROWSER
+========================= */
+
+.browser {
+    position: relative;
+
+    flex: 1;
+    min-height: 0;
+
+    background: #ffffff;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-bar {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 0;
+    height: 3px;
+
+    z-index: 20;
+
+    background: #8ab4f8;
+
+    opacity: 0;
+
+    transition:
+        width 0.3s ease,
+        opacity 0.2s;
+}
+
+.loading-bar.active {
+    width: 75%;
+    opacity: 1;
+}
+
+.loading-bar.complete {
+    width: 100%;
+    opacity: 0;
+}
+
+
+/* =========================
+   VIEWER
+========================= */
+
+.viewer {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    border: none;
+
+    background: white;
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+.home {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background:
+        radial-gradient(
+            circle at 50% 10%,
+            #272c35 0%,
+            #171a20 45%,
+            #111318 100%
+        );
+}
+
+.home-card {
+    width: min(760px, 100%);
+
+    text-align: center;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.brand {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 16px;
+
+    margin-bottom: 30px;
+}
+
+.brand-icon {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #20242b;
+
+    border:
+        1px solid #3b4049;
+
+    font-size: 38px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.25);
+}
+
+.brand h1 {
+    margin: 0;
+
+    color: #f1f3f4;
+
+    font-size:
+        clamp(32px, 6vw, 58px);
+
+    letter-spacing: -2px;
+}
+
+.brand p {
+    margin:
+        5px 0 0;
+
+    color: #8b929e;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   HOME SEARCH
+========================= */
+
+.home-search-wrapper {
+    height: 58px;
+
+    display: flex;
+
+    overflow: hidden;
+
+    background: #1d2026;
+
+    border:
+        1px solid #454b55;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.2);
+}
+
+.home-search {
+    flex: 1;
+
+    min-width: 0;
+
+    padding:
+        0 22px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 16px;
+}
+
+.home-search::placeholder {
+    color: #777e89;
+}
+
+.home-go {
+    margin: 6px;
+
+    padding:
+        0 22px;
+
+    border: none;
+
+    border-radius: 24px;
+
+    background: #8ab4f8;
+    color: #111318;
+
+    font-weight: 700;
+}
+
+.home-go:hover {
+    background: #a8c7fa;
+}
+
+
+/* =========================
+   SHORTCUTS
+========================= */
+
+.shortcuts {
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.shortcut {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        10px 16px;
+
+    border:
+        1px solid #3d424b;
+
+    border-radius: 22px;
+
+    background: #1c1f25;
+
+    color: #d8dbe0;
+
+    transition:
+        background 0.15s,
+        transform 0.1s;
+}
+
+.shortcut:hover {
+    background: #282c34;
+}
+
+.shortcut:active {
+    transform: scale(0.96);
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.info {
+    margin-top: 25px;
+
+    color: #707782;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   BLOCKED
+========================= */
+
+.blocked {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: #111318;
+
+    z-index: 10;
+}
+
+.blocked-card {
+    width: min(500px, 100%);
+
+    padding: 35px;
+
+    text-align: center;
+
+    background: #1b1e24;
+
+    border:
+        1px solid #353a43;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 70px
+        rgba(0, 0, 0, 0.3);
+}
+
+.blocked-icon {
+    font-size: 45px;
+}
+
+.blocked h2 {
+    margin:
+        15px 0 10px;
+
+    font-size: 25px;
+}
+
+.blocked p {
+    color: #9299a4;
+
+    line-height: 1.6;
+}
+
+.open-direct {
+    margin-top: 15px;
+
+    padding:
+        12px 20px;
+
+    border: none;
+
+    border-radius: 22px;
+
+    background: #8ab4f8;
+    color: #111318;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 5px;
+    }
+
+    .toolbar {
+        gap: 2px;
+    }
+
+    .nav-button {
+        width: 38px;
+        min-width: 38px;
+
+        height: 40px;
+    }
+
+    .address-wrapper {
+        height: 42px;
+    }
+
+    .address-icon,
+    .status {
+        display: none;
+    }
+
+    .go-button {
+        padding: 0 12px;
+    }
+
+    .home {
+        padding: 20px;
+    }
+
+    .brand {
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+    .brand h1 {
+        font-size: 38px;
+    }
+
+    .home-search-wrapper {
+        height: 52px;
+    }
+
+    input {
+        font-size: 16px !important;
+    }
+}

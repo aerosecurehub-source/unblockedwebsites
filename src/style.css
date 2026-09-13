@@ -1,1 +1,827 @@
-﻿body { margin: 0; background: #202124; color: #e8eaed; font-family: sans-serif; }
+﻿/* =========================================================
+   LINUX UNBLOCKED
+   Main stylesheet
+========================================================= */
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    background: #111318;
+    color: #e8eaed;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+    width: 100%;
+
+    padding: 8px;
+
+    background: #111318;
+
+    border-bottom:
+        1px solid #2c3038;
+
+    z-index: 50;
+}
+
+.toolbar {
+    width: 100%;
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+/* =========================================================
+   NAVIGATION BUTTONS
+========================================================= */
+
+.nav-button {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+    color: #e8eaed;
+
+    font-size: 24px;
+
+    transition:
+        background 0.15s ease,
+        opacity 0.15s ease,
+        transform 0.1s ease;
+}
+
+.nav-button:hover {
+    background: #252931;
+}
+
+.nav-button:active {
+    background: #30343d;
+
+    transform: scale(0.94);
+}
+
+.nav-button:disabled {
+    opacity: 0.3;
+
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   ADDRESS BAR
+========================================================= */
+
+.address-wrapper {
+    height: 44px;
+
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 15px;
+    padding-right: 5px;
+
+    background: #1d2026;
+
+    border:
+        1px solid #3b4049;
+
+    border-radius: 24px;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.address-wrapper:focus-within {
+    background: #20242b;
+
+    border-color: #8ab4f8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(138, 180, 248, 0.12);
+}
+
+.address-icon {
+    flex-shrink: 0;
+
+    margin-right: 8px;
+
+    color: #8b929e;
+
+    font-size: 14px;
+}
+
+.address {
+    width: 100%;
+
+    flex: 1;
+    min-width: 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #e8eaed;
+
+    font-size: 15px;
+}
+
+.address::placeholder {
+    color: #777e89;
+}
+
+
+/* =========================================================
+   GO BUTTON
+========================================================= */
+
+.go-button {
+    height: 34px;
+
+    flex-shrink: 0;
+
+    padding: 0 16px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: #8ab4f8;
+    color: #111318;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        background 0.15s ease,
+        transform 0.1s ease;
+}
+
+.go-button:hover {
+    background: #a8c7fa;
+}
+
+.go-button:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+    min-width: 70px;
+
+    padding: 0 8px;
+
+    color: #777e89;
+
+    font-size: 12px;
+
+    text-align: right;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BROWSER AREA
+========================================================= */
+
+.browser {
+    position: relative;
+
+    flex: 1;
+
+    min-height: 0;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   LOADING BAR
+========================================================= */
+
+.loading-bar {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 0;
+    height: 3px;
+
+    z-index: 100;
+
+    background: #8ab4f8;
+
+    opacity: 0;
+
+    transition:
+        width 0.3s ease,
+        opacity 0.2s ease;
+}
+
+.loading-bar.active {
+    width: 75%;
+
+    opacity: 1;
+}
+
+.loading-bar.complete {
+    width: 100%;
+
+    opacity: 0;
+}
+
+
+/* =========================================================
+   WEBSITE VIEWER
+========================================================= */
+
+.viewer {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    border: none;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   HOME PAGE
+========================================================= */
+
+.home {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background:
+        radial-gradient(
+            circle at 50% 5%,
+            #2a303a 0%,
+            #191c22 45%,
+            #111318 100%
+        );
+
+    overflow: auto;
+}
+
+.home-card {
+    width: min(760px, 100%);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 16px;
+
+    margin-bottom: 30px;
+}
+
+.brand-icon {
+    width: 72px;
+    height: 72px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #20242b;
+
+    border:
+        1px solid #3b4049;
+
+    font-size: 40px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.25);
+}
+
+.brand-text {
+    text-align: left;
+}
+
+.brand h1 {
+    margin: 0;
+
+    color: #f1f3f4;
+
+    font-size:
+        clamp(34px, 6vw, 58px);
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    letter-spacing: -2.5px;
+}
+
+.brand p {
+    margin:
+        8px 0 0;
+
+    color: #8b929e;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   HOME SEARCH
+========================================================= */
+
+.home-search-wrapper {
+    width: 100%;
+    height: 58px;
+
+    display: flex;
+
+    overflow: hidden;
+
+    background: #1d2026;
+
+    border:
+        1px solid #454b55;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.2);
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.home-search-wrapper:focus-within {
+    border-color: #8ab4f8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(138, 180, 248, 0.1),
+        0 15px 50px
+        rgba(0, 0, 0, 0.25);
+}
+
+.home-search {
+    flex: 1;
+
+    min-width: 0;
+
+    padding:
+        0 22px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-size: 16px;
+}
+
+.home-search::placeholder {
+    color: #777e89;
+}
+
+.home-go {
+    margin: 6px;
+
+    padding:
+        0 22px;
+
+    border: none;
+
+    border-radius: 24px;
+
+    background: #8ab4f8;
+    color: #111318;
+
+    font-weight: 700;
+
+    transition:
+        background 0.15s ease,
+        transform 0.1s ease;
+}
+
+.home-go:hover {
+    background: #a8c7fa;
+}
+
+.home-go:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================================================
+   SHORTCUTS
+========================================================= */
+
+.shortcuts {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.shortcut {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        10px 16px;
+
+    border:
+        1px solid #3d424b;
+
+    border-radius: 22px;
+
+    background: #1c1f25;
+
+    color: #d8dbe0;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.shortcut:hover {
+    background: #282c34;
+
+    border-color: #555c67;
+}
+
+.shortcut:active {
+    transform: scale(0.95);
+}
+
+.shortcut span:first-child {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info {
+    margin-top: 25px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    color: #707782;
+
+    font-size: 12px;
+}
+
+.separator {
+    color: #4d535d;
+}
+
+
+/* =========================================================
+   BLOCKED / EMBEDDING ERROR
+========================================================= */
+
+.blocked {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: #111318;
+
+    z-index: 20;
+}
+
+.blocked-card {
+    width: min(500px, 100%);
+
+    padding: 35px;
+
+    text-align: center;
+
+    background: #1b1e24;
+
+    border:
+        1px solid #353a43;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 70px
+        rgba(0, 0, 0, 0.3);
+}
+
+.blocked-icon {
+    font-size: 46px;
+}
+
+.blocked h2 {
+    margin:
+        15px 0 10px;
+
+    color: #f1f3f4;
+
+    font-size: 25px;
+}
+
+.blocked p {
+    margin: 0;
+
+    color: #9299a4;
+
+    line-height: 1.6;
+}
+
+.open-direct {
+    margin-top: 20px;
+
+    padding:
+        12px 20px;
+
+    border: none;
+
+    border-radius: 22px;
+
+    background: #8ab4f8;
+    color: #111318;
+
+    font-weight: 700;
+
+    transition:
+        background 0.15s ease,
+        transform 0.1s ease;
+}
+
+.open-direct:hover {
+    background: #a8c7fa;
+}
+
+.open-direct:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 5px;
+    }
+
+    .toolbar {
+        gap: 2px;
+    }
+
+    .nav-button {
+        width: 38px;
+        min-width: 38px;
+
+        height: 40px;
+
+        font-size: 22px;
+    }
+
+    .address-wrapper {
+        height: 42px;
+    }
+
+    .address-icon,
+    .status {
+        display: none;
+    }
+
+    .go-button {
+        padding: 0 12px;
+    }
+
+    .home {
+        padding: 20px;
+    }
+
+    .brand {
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .brand-text {
+        text-align: center;
+    }
+
+    .brand h1 {
+        font-size: 38px;
+    }
+
+    .brand p {
+        font-size: 13px;
+    }
+
+    .home-search-wrapper {
+        height: 52px;
+    }
+
+    .home-go {
+        padding: 0 17px;
+    }
+
+    .blocked-card {
+        padding: 25px;
+    }
+
+    input {
+        font-size: 16px !important;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .nav-button {
+        width: 34px;
+        min-width: 34px;
+    }
+
+    .go-button {
+        padding: 0 10px;
+    }
+
+    .brand-icon {
+        width: 62px;
+        height: 62px;
+
+        font-size: 34px;
+    }
+
+    .brand h1 {
+        font-size: 32px;
+    }
+
+    .shortcut {
+        padding:
+            9px 13px;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+    }
+}
